@@ -30,14 +30,16 @@ export default class TapAndExplore2 extends Component {
     this.state = {
       cells: [],
       currentImage: '',
+      word: '',
+      toggled: false,
     }
-    this.activeCells = [true, true, true];
-    this.animationKeys = ['A', 'B', 'C'];
+    this.activeCells = [true, true, true, true, true];
+    this.animationKeys = ['A', 'B', 'C', 'D', 'E'];
     this.loopAnimation = _.fill(Array(this.activeCells.length), false);
     this.sprites = _.fill(Array(this.activeCells.length), letterCharacter);
     this.scale = {image: 1};
     this.cellSpriteScale = 0.5;
-    this.numColumns = 3;
+    this.numColumns = 5;
     this.numRows = 1;
     this.letterImages = _.fill(Array(this.activeCells.length), letterImageResponse);
   }
@@ -77,30 +79,49 @@ export default class TapAndExplore2 extends Component {
 
   cellPressed (cellObj, position) {
     const cells = _.cloneDeep(this.state.cells);
-    console.warn()
-    this.setState({currentImage: cells[position].letterImage });
+    if (cells[position].animationKey == 'A') {
+      this.setState({currentImage: require('./sprites/letter/apple.png')});
+      this.setState({word: 'APPLE'});
+    } else if (cells[position].animationKey == 'B') {
+      this.setState({currentImage: require('./sprites/letter/ball2.png')});
+      this.setState({word: 'BALL'});
+    } else if (cells[position].animationKey == 'C') {
+      this.setState({currentImage: require('./sprites/letter/car2.png')});
+      this.setState({word: 'CAR'});
+    } else if (cells[position].animationKey == 'D') {
+      this.setState({currentImage: require('./sprites/letter/dog.png')});
+      this.setState({word: 'DOG'});
+    } else if (cells[position].animationKey == 'E') {
+      this.setState({currentImage: require('./sprites/letter/elephant.png')});
+      this.setState({word: 'ELEPHANT'});
+    }
+    // const imageObject = cells[position].letterImage;
+    // this.state.currentImage = imageObject;
   }
 
   render() {
+    const imageStatus = this.state.currentImage;
+    const wordStatus = this.state.word;
     return (
       <View style={styles.container}>
         <View style={[styles.letterContainer, styles.imageContainer]}>
-          <AnimatedSpriteMatrix
-            styles={{
-              ...(this.matrixLocation()),
-              ...(this.matrixSize()),
-              position: 'absolute',
-            }}
-          dimensions={{columns: this.numColumns, rows: this.numRows}}
-          cellSpriteScale={this.cellSpriteScale}
-          cellObjs={this.state.cells}
-          scale={this.scale}
-          onPress={(cellObj, position) => this.cellPressed(cellObj, position)}
-          />
+            <AnimatedSpriteMatrix
+              styles={{
+                ...(this.matrixLocation()),
+                ...(this.matrixSize()),
+                position: 'absolute',
+              }}
+            dimensions={{columns: this.numColumns, rows: this.numRows}}
+            cellSpriteScale={this.cellSpriteScale}
+            cellObjs={this.state.cells}
+            scale={this.scale}
+            onPress={(cellObj, position) => this.cellPressed(cellObj, position)}
+            />
         </View>
         <View style={styles.imageContainer}>
+          <Text style={styles.word}>{wordStatus}</Text>
           <Image
-            source={this.currentImage}
+            source={imageStatus}
           />
         </View>
       </View>
@@ -119,8 +140,13 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    width: 100,
-  }
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  word: {
+    flex: 1,
+    fontSize: 100,
+  },
 });
 
 AppRegistry.registerComponent('TapAndExplore2', () => TapAndExplore2);
