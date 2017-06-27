@@ -12,6 +12,7 @@ import {
   View,
   Dimensions,
   Image,
+  TouchableHighlight,
 } from 'react-native';
 
 import AnimatedSprite from 'react-native-animated-sprite';
